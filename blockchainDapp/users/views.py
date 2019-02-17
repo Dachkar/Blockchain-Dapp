@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
+from .models import Store
+
 
 def register(request):
     if request.method == 'POST':
@@ -18,3 +20,10 @@ def register(request):
 @login_required
 def profile(request):
     return render(request, 'users/profile.html')
+
+def store(request):
+    context = {
+        'posts': Store.objects.all(),
+        'title': 'Store'
+    }
+    return render(request, 'users/store.html', context)

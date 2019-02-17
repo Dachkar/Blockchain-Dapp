@@ -11,3 +11,13 @@ class Profile(models.Model):
 
 
 
+class Store(models.Model):
+    sellerId = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f'{self.name} item'

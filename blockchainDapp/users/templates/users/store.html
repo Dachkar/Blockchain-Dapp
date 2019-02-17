@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <p class="mr-2" href="#">Seller id: <b>{{ post.author.id }}</b> is selling:</p>
+                <h2 class="article-title">{{ post.name }} - <b>${{ post.price }}</b></h2>
+                <button class="btn btn-outline-info" type="submit">Buy</button>
+                <p> </p>
+            </div>
+            <p class="article-content">{{ post.description }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{%endblock content%}
