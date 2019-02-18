@@ -16,7 +16,9 @@
                 <h2 class="article-title">{{ object.name }} - ${{ object.price }}</h2>
                 <p class="article-content">{{ object.description }}</p>
                   <div class="article-metadata"></div>
+                  {% if object.author != user %}
                   <button class="btn btn-outline-info">BUY!</button>
+                  {% endif %}
 
               </div>
             </article>
