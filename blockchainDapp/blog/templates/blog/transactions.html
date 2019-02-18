@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h3 class="article-title" href="{% url 'post-detail' post.id %}">{{ post.buyer }} <p></p> <p>bought</p> {{ post.item}}</h3>
+          </div>
+        </article>
+    {% endfor %}
+{%endblock content%}

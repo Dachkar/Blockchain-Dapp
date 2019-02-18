@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Post
+from .models import Post, Transactions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -11,6 +11,13 @@ def home(request):
     }
     return render(request, 'blog/home.html', context)
 
+
+def transactions(request):
+    context = {
+        'posts': Transactions.objects.all(),
+        'title': 'Entries'
+    }
+    return render(request, 'blog/transactions.html', context)
 
 class PostListView(ListView):
     model = Post
@@ -25,7 +32,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['name', 'description', 'price']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -34,7 +41,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['name', 'description', 'price']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
