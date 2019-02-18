@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post, Transactions
+from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse
 
 
 def home(request):
@@ -11,6 +13,14 @@ def home(request):
     }
     return render(request, 'blog/home.html', context)
 
+
+def itemsold(request, pk):
+    if request.method == 'POST':
+        user = request.user
+        userBalance = request.user.profile.money
+        #Transactions.objects.create(item=st, buyer=user)
+        messages.success(request, f'User {user} has {userBalance}')
+        return redirect(reverse('blog-home'))
 
 def transactions(request):
     context = {

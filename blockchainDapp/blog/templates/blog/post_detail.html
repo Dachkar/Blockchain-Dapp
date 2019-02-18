@@ -17,7 +17,10 @@
                 <p class="article-content">{{ object.description }}</p>
                   <div class="article-metadata"></div>
                   {% if object.author != user %}
-                  <button class="btn btn-outline-info">BUY!</button>
+                    <form action="{% url 'itemsold' object.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-info" type="submit">BUY!</button>
+                    </form>
                   {% endif %}
 
               </div>
