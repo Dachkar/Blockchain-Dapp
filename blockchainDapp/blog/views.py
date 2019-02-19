@@ -20,10 +20,13 @@ def itemsold(request, pk):
         user = request.user
         storeEntry = Post.objects.all().filter(id=pk).first()
         userProfile = Profile.objects.all().filter(user=user).first()
+        authorProfile = Profile.objects.all().filter(user=storeEntry.author).first()
         if userProfile.money > storeEntry.price:
             newbalance = userProfile.money - storeEntry.price
             userProfile.money = newbalance
+            authorProfile.money = authorProfile.money + storeEntry.price
             userProfile.save()
+            authorProfile.save()
             Transactions.objects.create(item=storeEntry.name, buyer=user)
             Post.objects.all().filter(id=pk).delete()
             messages.success(request, f'Success! You just bought {storeEntry}. Your balance is now {userProfile.money}')
