@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
+from users.models import Profile
 
 
 def home(request):
@@ -17,11 +18,19 @@ def home(request):
 def itemsold(request, pk):
     if request.method == 'POST':
         user = request.user
-        userBalance = request.user.profile.money
-        #Transactions.objects.create(item=st, buyer=user)
-        messages.success(request, f'User {user} has {userBalance}')
-        return redirect(reverse('blog-home'))
-
+        storeEntry = Post.objects.all().filter(id=pk).first()
+        userProfile = Profile.objects.all().filter(user=user).first()
+        if userProfile.money > storeEntry.price:
+            newbalance = userProfile.money - storeEntry.price
+            userProfile.money = newbalance
+            userProfile.save()
+            Transactions.objects.create(item=storeEntry.name, buyer=user)
+            Post.objects.all().filter(id=pk).delete()
+            messages.success(request, f'Success! You just bought {storeEntry}. Your balance is now {userProfile.money}')
+            return redirect(reverse('blog-home'))
+        else:
+            messages.warning(request, f'{user}, you don\'t have enough money to buy {storeEntry}!')
+            return redirect(reverse('blog-home'))
 def transactions(request):
     context = {
         'posts': Transactions.objects.all(),
